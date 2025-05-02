@@ -1,11 +1,21 @@
 package com.korea.todo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
+import com.korea.todo.model.TodoDTO;
 import com.korea.todo.model.TodoEntity;
 import com.korea.todo.persistence.TodoRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 // 스프링 프레임워크에서 제공하는 어노테이션 중 하나로, 서비스 레이어에 사용되는
 // 클래스를 명시할 때 사용
@@ -16,15 +26,74 @@ public class TodoService {
 	@Autowired
 	private TodoRepository repository;
 	
-	public String testService() {
-		// 엔티티 하나 생성
-		TodoEntity entity = TodoEntity.builder().title("My first todo item").build();
-		// TodoEntity 저장(db에 저장)
+//	public String testService() {
+//		// 엔티티 하나 생성
+//		TodoEntity entity = TodoEntity.builder().userId("홍길동")
+//				.title("My first todo item").build();
+//		// TodoEntity 저장(db에 저장)
+//		repository.save(entity);
+//		// TodoEntity검색
+//		TodoEntity savedEntity = repository.findByUserIdQuery(entity.getUserId());
+//		return savedEntity.getTitle();
+//	}
+	
+	// 추가하고 userId를 기준으로 목록을 반환
+	public List<TodoEntity> create(TodoEntity entity){
+		
+		validate(entity);
+		
+		// 데이터베이스에 추가
 		repository.save(entity);
-		// TodoEntity검색
-		TodoEntity savedEntity = repository.findById(entity.getId()).get();
-		return savedEntity.getTitle();
+		
+		log.info("Entity Id : {} is saved", entity.getId());
+		
+		// 엔티티를 데이터베이스에 추가하고, 전체 조회를 한다.
+		return repository.findByUserIdQuery(entity.getUserId());
 	}
+	
+	private void validate(TodoEntity entity) {
+		if(entity == null) {
+			log.warn("Entity cannot be null");
+			throw new RuntimeException("Entity cannot be null");
+		}
+		if(entity.getUserId() == null) {
+			log.warn("Unknown user");
+			throw new RuntimeException("Unknown user");
+		}
+	}
+	
+	// 조회하는 retrive메서드
+	public List<TodoEntity> retrive(String userId) {
+		return repository.findByUserId(userId);
+	}
+	
+	public List<TodoEntity> update(TodoEntity entity){
+		// 저장할 엔티티가 유효한지 확인
+		validate(entity);
+		
+		// 넘겨받은 엔티티 id를 이용해 TodoEntity를 가져온다.
+		// 존재하지 않는 엔티티는 수정할 수 없으니까.
+		Optional<TodoEntity> original = repository.findById(entity.getId());
+		
+		original.ifPresent(todo -> {
+			// 반환된 TodoEntity가 존재한다면, 값을 새 Entity값으로 덮어씌운다.
+			todo.setTitle(entity.getTitle());
+			todo.setDone(entity.isDone());
+			
+			repository.save(todo);
+		});
+		
+		// 전체 내용을 조회해서 반환
+		return retrive(entity.getUserId());
+	}
+	public List<TodoEntity> delete(TodoEntity entity){
+	      //삭제할 엔티티가 유효한지 확인
+	      validate(entity);
+	      
+	      repository.delete(entity);
+	      
+	      return repository.findByUserId(entity.getUserId());
+	   }
 }
 
 // Optional
