@@ -43,6 +43,7 @@ public class TodoService {
 		validate(entity);
 		
 		// 데이터베이스에 추가
+		// insert into todo values(....)
 		repository.save(entity);
 		
 		log.info("Entity Id : {} is saved", entity.getId());

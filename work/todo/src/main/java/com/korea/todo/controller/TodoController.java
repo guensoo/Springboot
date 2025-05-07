@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.korea.todo.model.ResponseDTO;
 import com.korea.todo.model.TodoDTO;
 import com.korea.todo.model.TodoEntity;
-import com.korea.todo.service.RequsetBody;
 import com.korea.todo.service.TodoService;
 
 @RestController
