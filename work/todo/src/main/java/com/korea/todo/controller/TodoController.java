@@ -97,7 +97,7 @@ public class TodoController {
 		TodoEntity entity = TodoDTO.toEntity(dto);
 		
 		// id
-		entity.setId(null);
+//		entity.setId(null); // PUT에는 null로 set하면 안됨... 수정하려면 ID를 찾아야함미다!
 		
 		entity.setUserId(temporaryUserId);;
 		

@@ -76,6 +76,10 @@ public class TodoService {
 		// 존재하지 않는 엔티티는 수정할 수 없으니까.
 		Optional<TodoEntity> original = repository.findById(entity.getId());
 		
+		if (original.isEmpty()) {
+		    throw new RuntimeException("해당 ID의 TODO 항목을 찾을 수 없습니다: " + entity.getId());
+		}
+		
 		original.ifPresent(todo -> {
 			// 반환된 TodoEntity가 존재한다면, 값을 새 Entity값으로 덮어씌운다.
 			todo.setTitle(entity.getTitle());
