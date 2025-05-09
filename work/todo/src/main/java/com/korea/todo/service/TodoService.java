@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 // 빈(bean)으로 등록하고, 비즈니스 로직을 처리하는 역할을 맡는다.
 public class TodoService {
 	
+	// 필드주입 방법
 	@Autowired
 	private TodoRepository repository;
 	
