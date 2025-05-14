@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
 	private int id;
 	private String name;
-	private int inventory;
+	private int stock;
 	private int price;
 	private LocalDateTime localTime;
 	private LocalDateTime editTime;
@@ -22,7 +22,7 @@ public class ProductDTO {
 	public ProductDTO(ProductEntity entity){
 		this.id = entity.getId();
 		this.name = entity.getName();
-		this.inventory = entity.getInventory();
+		this.stock = entity.getStock();
 		this.price = entity.getPrice();
 		this.localTime = entity.getLocalTime();
 		this.editTime = entity.getEditTime();
@@ -32,7 +32,7 @@ public class ProductDTO {
 		return ProductEntity.builder()
 							.id(dto.getId())
 							.name(dto.getName())
-							.inventory(dto.getInventory())
+							.stock(dto.getStock())
 							.price(dto.getPrice())
 							.build();
 	}

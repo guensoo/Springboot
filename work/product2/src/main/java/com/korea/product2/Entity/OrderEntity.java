@@ -3,36 +3,40 @@ package com.korea.product2.Entity;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
-@Data
 @Entity
-@AllArgsConstructor
+@Data
+@Builder
 @NoArgsConstructor
-@Table(name="Products")
-public class ProductEntity {
+@AllArgsConstructor
+@Table(name="Orders")
+public class OrderEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	private String name;
-	private int stock;
-	private int price;
+	private int orderId;
+	
+	// ProductEntity와 다대일 관계 설정
+	@ManyToOne
+	@JoinColumn(name="productId", nullable=false)
+	private ProductEntity product;
+	
+	private int productCount;
 	
 	@CreationTimestamp
-	private LocalDateTime localTime;
+	private LocalDateTime orderDate;
 	
-	@UpdateTimestamp
-	private LocalDateTime editTime;
+	
 }
