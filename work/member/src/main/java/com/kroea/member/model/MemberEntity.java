@@ -1,5 +1,6 @@
 package com.kroea.member.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +25,7 @@ public class MemberEntity {
 	
 	private String name;
 	
-//	@UniqueConstraint
+//	@Column( name = Unique;)
 	private String email;
 	private String password;
 }
